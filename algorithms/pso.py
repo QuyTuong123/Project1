@@ -16,11 +16,9 @@ class PSO(BaseOptimizer):
     def initialize(self):
         lb, ub = self.bounds
 
-        self.positions = np.random.uniform(lb, ub,
-                                           (self.pop_size, self.dim))
+        self.positions = np.random.uniform(lb, ub, (self.pop_size, self.dim))
 
-        self.velocities = np.random.uniform(-1, 1,
-                                            (self.pop_size, self.dim))
+        self.velocities = np.random.uniform(-1, 1, (self.pop_size, self.dim))
 
         self.pbest_positions = self.positions.copy()
         self.pbest_scores = np.apply_along_axis(
