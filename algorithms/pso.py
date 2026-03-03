@@ -7,7 +7,8 @@ class PSO(BaseOptimizer):
                  w=0.7, c1=1.5, c2=1.5):
         
         super().__init__(obj_func, bounds, pop_size, max_iter)
-
+        self.diversity_history = []
+        self.trajectory = []
         self.dim = dim
         self.w = w
         self.c1 = c1
@@ -67,8 +68,11 @@ class PSO(BaseOptimizer):
     def run(self):
         self.initialize()
 
-        for iter in range(self.max_iter):
+        for _ in range(self.max_iter):
             self.update()
             self.history.append(self.gbest_score)
-
+            diversity = np.std(self.positions)
+            self.diversity_history.append(diversity)
+            self.trajectory.append(self.positions.copy())
+            
         return self.gbest_position, self.gbest_score

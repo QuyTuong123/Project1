@@ -1,5 +1,3 @@
-# experiments/scalability_test.py
-
 import time
 from problems.continuous_functions import Sphere
 from algorithms.pso import PSO

@@ -18,3 +18,12 @@ def plot_convergence(history, title="Convergence Plot"):
     plt.title(title)
     plt.grid(True)
     plt.show()
+
+def plot_diversity(diversity_history):
+    plt.figure()
+    plt.plot(diversity_history)
+    plt.xlabel("Iteration")
+    plt.ylabel("Diversity (Std)")
+    plt.title("Exploration Analysis")
+    plt.grid(True)
+    plt.show()
