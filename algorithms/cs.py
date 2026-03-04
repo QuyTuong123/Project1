@@ -1,6 +1,6 @@
 import numpy as np
 from core.base_optimizer import BaseOptimizer
-
+from core.utils import initialize_population
 class CS(BaseOptimizer):
     def __init__(self, obj_func, bounds, dim,
                  pop_size=30, max_iter=100, pa=0.25):
@@ -16,7 +16,7 @@ class CS(BaseOptimizer):
 
         best_idx = np.argmin(self.fitness)
         self.gbest = self.population[best_idx].copy()
-        self.gbest_score = self.fitness[best_idx]
+        self.best_score = self.fitness[best_idx]
 
     def levy(self):
         return np.random.randn(self.dim)
@@ -44,13 +44,13 @@ class CS(BaseOptimizer):
                 self.fitness[i] = self.obj_func(self.population[i])
 
         best_idx = np.argmin(self.fitness)
-        if self.fitness[best_idx] < self.gbest_score:
+        if self.fitness[best_idx] < self.best_score:
             self.gbest = self.population[best_idx].copy()
-            self.gbest_score = self.fitness[best_idx]
+            self.best_score = self.fitness[best_idx]
 
     def run(self):
         self.initialize()
         for _ in range(self.max_iter):
             self.update()
-            self.history.append(self.gbest_score)
-        return self.gbest_score
+            self.history.append(self.best_score)
+        return self.best_score

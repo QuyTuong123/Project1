@@ -1,6 +1,6 @@
 import numpy as np
 from core.base_optimizer import BaseOptimizer
-
+from core.utils import initialize_population
 class ABC(BaseOptimizer):
     def __init__(self, obj_func, bounds, dim,
                  pop_size=30, max_iter=100, limit=50):
@@ -8,7 +8,8 @@ class ABC(BaseOptimizer):
         super().__init__(obj_func, bounds, pop_size, max_iter)
         self.dim = dim
         self.limit = limit
-
+        self.history = []
+        self.trajectory = []
     def initialize(self):
         lb, ub = self.bounds
         self.population = np.random.uniform(lb, ub, (self.pop_size, self.dim))
@@ -17,7 +18,7 @@ class ABC(BaseOptimizer):
 
         best_idx = np.argmin(self.fitness)
         self.gbest = self.population[best_idx].copy()
-        self.gbest_score = self.fitness[best_idx]
+        self.best_score = self.fitness[best_idx]
 
     def update(self):
         lb, ub = self.bounds
@@ -49,13 +50,14 @@ class ABC(BaseOptimizer):
 
         # Update global best
         best_idx = np.argmin(self.fitness)
-        if self.fitness[best_idx] < self.gbest_score:
+        if self.fitness[best_idx] < self.best_score:
             self.gbest = self.population[best_idx].copy()
-            self.gbest_score = self.fitness[best_idx]
+            self.best_score = self.fitness[best_idx]
 
     def run(self):
         self.initialize()
         for _ in range(self.max_iter):
             self.update()
-            self.history.append(self.gbest_score)
-        return self.gbest_score
+            self.history.append(self.best_score)
+            self.trajectory.append(self.population.copy())
+        return self.gbest ,self.best_score

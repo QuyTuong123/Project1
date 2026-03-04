@@ -1,5 +1,5 @@
-from algorithms.pso import PSO
 from algorithms.aco import ACO
+from algorithms.pso import PSO
 from problems.continuous_functions import Sphere
 import numpy as np
 def run_convergence_test():
@@ -16,13 +16,13 @@ def run_convergence_test():
         "ACO": aco.history
     }
 
-def run_30_times():
+def run_30_times(OptimizerClass):
     results = []
 
     for _ in range(30):
         problem = Sphere(dim=30)
 
-        optimizer = PSO(
+        optimizer = OptimizerClass(
             obj_func=problem.evaluate,
             bounds=(problem.lb, problem.ub),
             dim=problem.dim,

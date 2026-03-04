@@ -1,6 +1,6 @@
 import numpy as np
 from core.base_optimizer import BaseOptimizer
-
+from core.utils import initialize_population
 class PSO(BaseOptimizer):
     def __init__(self, obj_func, bounds, dim,
                  pop_size=30, max_iter=100,
@@ -27,8 +27,8 @@ class PSO(BaseOptimizer):
         )
 
         best_idx = np.argmin(self.pbest_scores)
-        self.gbest_position = self.pbest_positions[best_idx].copy()
-        self.gbest_score = self.pbest_scores[best_idx]
+        self.best_position = self.pbest_positions[best_idx].copy()
+        self.best_score = self.pbest_scores[best_idx]
 
     def update(self):
         lb, ub = self.bounds
@@ -42,7 +42,7 @@ class PSO(BaseOptimizer):
             self.velocities[i] = (
                 self.w * self.velocities[i]
                 + self.c1 * r1 * (self.pbest_positions[i] - self.positions[i])
-                + self.c2 * r2 * (self.gbest_position - self.positions[i])
+                + self.c2 * r2 * (self.best_position - self.positions[i])
             )
 
             # Update position
@@ -61,8 +61,8 @@ class PSO(BaseOptimizer):
 
         # Update gbest sau khi cập nhật tất cả particle
         best_idx = np.argmin(self.pbest_scores)
-        self.gbest_position = self.pbest_positions[best_idx].copy()
-        self.gbest_score = self.pbest_scores[best_idx]
+        self.best_position = self.pbest_positions[best_idx].copy()
+        self.best_score = self.pbest_scores[best_idx]
 
 
     def run(self):
@@ -70,9 +70,9 @@ class PSO(BaseOptimizer):
 
         for _ in range(self.max_iter):
             self.update()
-            self.history.append(self.gbest_score)
+            self.history.append(self.best_score)
             diversity = np.std(self.positions)
             self.diversity_history.append(diversity)
             self.trajectory.append(self.positions.copy())
             
-        return self.gbest_position, self.gbest_score
+        return self.best_position, self.best_score
