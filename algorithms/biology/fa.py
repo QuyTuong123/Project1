@@ -6,7 +6,7 @@ class FA(BaseOptimizer):
                  pop_size=30, max_iter=100,
                  alpha=0.2, beta0=1, gamma=1):
 
-        super().__init__(obj_func, bounds, pop_size, max_iter)
+        super().__init__(obj_func, bounds, pop_size, max_iter, dim)
         self.dim = dim
         self.alpha = alpha
         self.beta0 = beta0
@@ -20,6 +20,7 @@ class FA(BaseOptimizer):
         best_idx = np.argmin(self.fitness)
         self.gbest = self.population[best_idx].copy()
         self.best_score = self.fitness[best_idx]
+        self.best_position = self.gbest.copy()
 
     def update(self):
         lb, ub = self.bounds
@@ -43,9 +44,14 @@ class FA(BaseOptimizer):
             self.gbest = self.population[best_idx].copy()
             self.best_score = self.fitness[best_idx]
             self.best_position = self.population[best_idx].copy()
+            
     def run(self):
         self.initialize()
+
+        self.history = []
+
         for _ in range(self.max_iter):
             self.update()
             self.history.append(self.best_score)
+
         return self.best_position, self.best_score

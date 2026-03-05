@@ -1,11 +1,16 @@
+import numpy as np
 class BaseOptimizer:
-    def __init__(self, obj_func, bounds, pop_size, max_iter):
+    def __init__(self, obj_func, bounds, pop_size, max_iter, dim):
         self.obj_func = obj_func
         self.bounds = bounds
         self.pop_size = pop_size
         self.max_iter = max_iter
+        self.lb = np.array(bounds[0])
+        self.ub = np.array(bounds[1])
+        self.dim = dim
         self.history = []
-
+        self.best_score = float('inf') 
+        self.best_position = None
     def initialize(self):
         raise NotImplementedError
 
@@ -17,4 +22,4 @@ class BaseOptimizer:
         for _ in range(self.max_iter):
             self.update()
             self.history.append(self.best_score)
-        return self.best_solution
+        return self.best_position, self.best_score

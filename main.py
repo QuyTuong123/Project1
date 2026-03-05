@@ -1,65 +1,97 @@
-from problems.continuous_functions import Sphere
-# from algorithms.aco import ACO
-from algorithms.pso import PSO
-# from algorithms.abc import ABC
-# from algorithms.fa import FA
-# from algorithms.cs import CS
-from visualization.plot_convergence import plot_convergence
+import time
+import os
+import numpy as np
+from problems.sphere import Sphere
+from problems.tsp import TSPProblem
+from algorithms.biology.abc import ABC
+# Biology algorithms
+from algorithms.biology.pso import PSO
+from algorithms.biology.aco import ACO
+from algorithms.biology.fa import FA
+from algorithms.biology.cs import CS
+# Evolution algorithms
+from algorithms.evolution.ga import GA
+from algorithms.evolution.de import DE
+# Physics algorithms
+from algorithms.physics.sa import SA
+# Human algorithms
+from algorithms.human.tlbo import TLBO
+# Visualization
 from experiments.convergence_analysis import run_30_times
-from visualization.plot_convergence import plot_diversity
+from visualization.plot_convergence import plot_convergence, plot_diversity
 from visualization.plot_3d_surface import plot_surface, plot_particles_on_surface
-from problems.continuous_functions import Sphere
-from algorithms.abc import ABC
 
 def main():
+    print("\n===== STEP 1: 2D Optimization =====")
     problem2d = Sphere(dim=2)
-    optimizer_abc = ABC(
+    algorithms = {
+        "PSO": PSO,   
+        "ABC": ABC,
+        "FA": FA,
+        "CS": CS
+    }
+    results = {}
+    for name, Algo in algorithms.items():
+        optimizer = Algo(
+            obj_func=problem2d.evaluate,
+            bounds=(problem2d.lb, problem2d.ub),
+            dim=30,
+            pop_size=30,
+            max_iter=100
+        )
+        best_score, best_position = optimizer.run()
+        results[name] = (best_score, best_position)
+    print("\n===== TABLE 1: BEST FITNESS (DIM=2) =====")
+    print("{:<10} {:<15} {}".format("Algorithm", "Best Fitness", "Best Position"))
+    print("-"*60)
+    for name, (fit, pos) in results.items():
+        fit = np.min(fit)
+        pos_str = np.array2string(pos, precision=3, suppress_small=True)
+        print("{:<10} {:<15.6e} {}".format(name, fit, pos_str))
+
+    print("\n===== STEP 2: VISUALIZATION =====")
+    optimizer = ABC(
         obj_func=problem2d.evaluate,
         bounds=(problem2d.lb, problem2d.ub),
         dim=2,
-        pop_size=20,
-        max_iter=50
+        pop_size=30,
+        max_iter=100
     )
-    optimizer_abc.run()
-    plot_surface(problem2d.evaluate, problem2d.lb, problem2d.ub)
-    plot_particles_on_surface(problem2d.evaluate, optimizer_abc.trajectory)
-    #mean_pso, std_pso = run_30_times(PSO)
-    #mean_abc, std_abc = run_30_times(ABC)
-    #mean_fa, std_fa = run_30_times(FA)
-    #mean_cs, std_cs = run_30_times(CS)
-    #mean_aco, std_aco = run_30_times(ACO)
-
-    problem30d = Sphere(dim=30)
-    optimizer = PSO(
-    obj_func=problem30d.evaluate,
-    bounds=(problem30d.lb, problem30d.ub),
-    dim=30,
-    pop_size=50,
-    max_iter=200
-    )
-    best_position, best_score = optimizer_abc.run()
-    
+    optimizer.run()
+    # 1 Convergence
+    plot_convergence(optimizer.history)
+    # 2 Diversity
     plot_diversity(optimizer.diversity_history)
+    # 3 Surface
+    plot_surface(problem2d.evaluate, problem2d.lb, problem2d.ub)
+    # particle movement
+    plot_particles_on_surface(problem2d.evaluate, optimizer.trajectory)
+    print("\n===== STEP 3: 30 RUNS COMPARISON =====")
+    algos_8 = {
+        "ABC": ABC,
+        "FA": FA,
+        "CS": CS,
+        "PSO": PSO,
+        "GA": GA,
+        "DE": DE,
+        "SA": SA,
+        "TLBO": TLBO
+    }
+    print("\n===== TABLE 2: MEAN / STD / TIME =====")
+    print("{:<10} {:<15} {:<15} {:<10}".format(
+        "Algorithm", "Mean", "Std", "Time(s)"
+    ))
 
-    print("===== PSO Result =====")
-    print("Best Fitness:", best_score)
-    print("Best Position:", best_position)
+    print("-"*55)
+    for name, Algo in algos_8.items():
+        start = time.time()
+        mean, std, runtime = run_30_times(Algo)
+        end = time.time()
+        runtime = end - start
+        print("{:<10} {:<15.6e} {:<15.6e} {:<10.4f}".format(
+        name, mean, std, runtime
+        ))
+    print("\nDone!")
 
-    mean, std, results = run_30_times(PSO)
-
-    print("===== 30 Runs Result =====")
-    print("Mean Fitness:", mean)
-    print("Std:", std)
-
-    # print("\n===== FINAL COMPARISON =====")
-    # print("{:<10} {:<15} {:<15}".format("Algorithm", "Mean", "Std"))
-    # print("-" * 45)
-
-    # print("{:<10} {:<15.6e} {:<15.6e}".format("PSO", mean_pso, std_pso))
-    # print("{:<10} {:<15.6e} {:<15.6e}".format("ABC", mean_abc, std_abc))
-    # print("{:<10} {:<15.6e} {:<15.6e}".format("FA", mean_fa, std_fa))
-    # print("{:<10} {:<15.6e} {:<15.6e}".format("CS", mean_cs, std_cs))
-    # print("{:<10} {:<15.6e} {:<15.6e}".format("ACO", mean_aco, std_aco))
-    
 if __name__ == "__main__":
     main()

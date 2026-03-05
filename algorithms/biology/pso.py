@@ -6,7 +6,7 @@ class PSO(BaseOptimizer):
                  pop_size=30, max_iter=100,
                  w=0.7, c1=1.5, c2=1.5):
         
-        super().__init__(obj_func, bounds, pop_size, max_iter)
+        super().__init__(obj_func, bounds, pop_size, max_iter, dim)
         self.diversity_history = []
         self.trajectory = []
         self.dim = dim

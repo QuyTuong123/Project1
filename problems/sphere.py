@@ -1,3 +1,4 @@
+import numpy as np
 class Sphere:
     def __init__(self, dim=30):
         self.dim = dim

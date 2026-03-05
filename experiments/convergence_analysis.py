@@ -1,41 +1,38 @@
-from algorithms.aco import ACO
-from algorithms.pso import PSO
-from problems.continuous_functions import Sphere
 import numpy as np
-def run_convergence_test():
+import time
+from problems.sphere import Sphere
+def run_30_times(OptimizerClass, runs=30):
+
     problem = Sphere(dim=30)
+    scores = []
 
-    pso = PSO(problem, max_iter=200, population_size=50)
-    aco = ACO(problem, max_iter=200, population_size=50)
+    start = time.time()
 
-    pso.run()
-    aco.run()
+    for _ in range(runs):
 
-    return {
-        "PSO": pso.history,
-        "ACO": aco.history
-    }
+        try:
+            optimizer = OptimizerClass(
+                obj_func=problem.evaluate,
+                bounds=(problem.lb, problem.ub),
+                dim = 30,
+                pop_size=30,
+                max_iter=100
+            )
+        except TypeError:
+            optimizer = OptimizerClass(
+                obj_func=problem.evaluate,
+                bounds=(problem.lb, problem.ub),
+                pop_size=30,
+                max_iter=100
+            )
 
-def run_30_times(OptimizerClass):
-    results = []
+        best_score, _ = optimizer.run()
+        scores.append(best_score)
 
-    for _ in range(30):
-        problem = Sphere(dim=30)
+    end = time.time()
 
-        optimizer = OptimizerClass(
-            obj_func=problem.evaluate,
-            bounds=(problem.lb, problem.ub),
-            dim=problem.dim,
-            pop_size=50,
-            max_iter=200
-        )
+    mean = np.mean(scores)
+    std = np.std(scores)
+    runtime = end - start
 
-        best_position, best_score = optimizer.run()
-        results.append(best_score)
-
-    results = np.array(results)
-
-    mean = np.mean(results)
-    std = np.std(results)
-
-    return mean, std, results
+    return mean, std, runtime

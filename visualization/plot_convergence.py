@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 
-def plot_convergence(results):
+def plot_multiple_convergence(results):
     for name, history in results.items():
         plt.plot(history, label=name)
-
     plt.xlabel("Iteration")
     plt.ylabel("Best Fitness")
     plt.legend()
-    plt.title("Convergence on Sphere Function")
+    plt.title("Convergence Comparison")
+    plt.grid(True)
     plt.show()
 
 def plot_convergence(history, title="Convergence Plot"):
