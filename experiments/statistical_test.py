@@ -29,7 +29,6 @@ def statistic_test():
         "SA": SA,
         "TLBO": TLBO
     }
-
     for name, OptimizerClass in algorithms.items():
         results = []
         times = []
@@ -41,13 +40,11 @@ def statistic_test():
                 pop_size=50,
                 max_iter=200
             )
-
             start = time.time()
             best_position, best_score = optimizer.run()
             end = time.time()
             results.append(best_score)
             times.append(end - start)
-
         mean = np.mean(results)
         std = np.std(results)
         avg_time = np.mean(times)

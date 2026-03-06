@@ -23,8 +23,6 @@ class ABC(BaseOptimizer):
 
     def update(self):
         lb, ub = self.bounds
-
-        # Employed bees
         for i in range(self.pop_size):
             k = np.random.randint(self.pop_size)
             phi = np.random.uniform(-1, 1, self.dim)
@@ -42,14 +40,12 @@ class ABC(BaseOptimizer):
             else:
                 self.trial[i] += 1
 
-        # Scout bees
         for i in range(self.pop_size):
             if self.trial[i] > self.limit:
                 self.population[i] = np.random.uniform(lb, ub, self.dim)
                 self.fitness[i] = self.obj_func(self.population[i])
                 self.trial[i] = 0
 
-        # Update global best
         best_idx = np.argmin(self.fitness)
         if self.fitness[best_idx] < self.best_score:
             self.gbest = self.population[best_idx].copy()

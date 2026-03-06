@@ -23,20 +23,15 @@ class CS(BaseOptimizer):
 
     def update(self):
         lb, ub = self.bounds
-
-        # Generate new solutions
         for i in range(self.pop_size):
             step = self.levy()
             candidate = self.population[i] + 0.01 * step
             candidate = np.clip(candidate, lb, ub)
-
             fit = self.obj_func(candidate)
-
             if fit < self.fitness[i]:
                 self.population[i] = candidate
                 self.fitness[i] = fit
 
-        # Abandon some nests
         abandon = np.random.rand(self.pop_size) < self.pa
         for i in range(self.pop_size):
             if abandon[i]:

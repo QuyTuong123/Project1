@@ -4,8 +4,8 @@ from core.base_optimizer import BaseOptimizer
 class SA(BaseOptimizer):
     def initialize(self):
         dim = len(self.bounds)
-        low = self.bounds[:,0]
-        high = self.bounds[:,1]
+        low = self.lb
+        high = self.ub
         self.population = np.random.uniform(
             low, high, (self.pop_size, dim)
         )
@@ -18,8 +18,8 @@ class SA(BaseOptimizer):
     
     def initialize(self):
         dim = len(self.bounds)
-        low = self.bounds[:,0]
-        high = self.bounds[:,1]
+        low = self.lb
+        high = self.ub
         self.current = np.random.uniform(low,high,dim)
         self.current_score = self.obj_func(self.current)
         self.best_solution = self.current
@@ -34,6 +34,7 @@ class SA(BaseOptimizer):
         candidate = self.neighbor()
         score = self.obj_func(candidate)
         delta = score - self.current_score
+        candidate = np.clip(candidate, self.lb, self.ub)
         if delta < 0 or np.random.rand() < np.exp(-delta / self.temperature):
             self.current = candidate
             self.current_score = score

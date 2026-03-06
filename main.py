@@ -35,19 +35,32 @@ def main():
         optimizer = Algo(
             obj_func=problem2d.evaluate,
             bounds=(problem2d.lb, problem2d.ub),
-            dim=30,
+            dim=2,
             pop_size=30,
             max_iter=100
         )
-        best_score, best_position = optimizer.run()
+        best_position, best_score = optimizer.run()
         results[name] = (best_score, best_position)
     print("\n===== TABLE 1: BEST FITNESS (DIM=2) =====")
-    print("{:<10} {:<15} {}".format("Algorithm", "Best Fitness", "Best Position"))
+    print("{:<10} {:<18} {}".format("Algorithm", "Best Fitness", "Best Position"))
     print("-"*60)
+
     for name, (fit, pos) in results.items():
-        fit = np.min(fit)
-        pos_str = np.array2string(pos, precision=3, suppress_small=True)
-        print("{:<10} {:<15.6e} {}".format(name, fit, pos_str))
+        fit_str = f"{fit:.2e}"
+        pos_str = "["
+        for i, x in enumerate(pos):
+            if abs(x) < 1e-4:
+                val = f"{x:.1e}"
+            else:
+                val = f"{x:.5f}"
+
+            if i < len(pos) - 1:
+                pos_str += val + " , "
+            else:
+                pos_str += val
+        pos_str += "]"
+
+        print("{:<10} {:<18} {}".format(name, fit_str, pos_str))
 
     print("\n===== STEP 2: VISUALIZATION =====")
     optimizer = ABC(
@@ -68,8 +81,8 @@ def main():
     plot_particles_on_surface(problem2d.evaluate, optimizer.trajectory)
     print("\n===== STEP 3: 30 RUNS COMPARISON =====")
     algos_8 = {
-        "ABC": ABC,
         "FA": FA,
+        "ABC": ABC,
         "CS": CS,
         "PSO": PSO,
         "GA": GA,

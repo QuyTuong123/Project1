@@ -7,7 +7,6 @@ class DE(BaseOptimizer):
         self.population = np.random.uniform(
             lb, ub, (self.pop_size, self.dim)
         )
-
         self.fitness = np.apply_along_axis(
             self.obj_func, 1, self.population
         )
@@ -29,20 +28,17 @@ class DE(BaseOptimizer):
         for j in range(len(target)):
             if np.random.rand() < CR:
                 trial[j] = mutant[j]
-        trial = np.clip(trial, self.bounds[:,0], self.bounds[:,1])
+        trial = np.clip(trial, self.lb, self.ub)
         return trial
         
     def update(self):
-
         for i in range(self.pop_size):
-
             mutant = self.mutation(i)
             trial = self.crossover(self.population[i], mutant)
             trial_fit = self.obj_func(trial)
             if trial_fit < self.fitness[i]:
                 self.population[i] = trial
                 self.fitness[i] = trial_fit
-
                 if trial_fit < self.best_score:
                     self.best_score = trial_fit
                     self.best_solution = trial

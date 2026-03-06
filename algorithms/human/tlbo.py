@@ -5,7 +5,6 @@ class TLBO(BaseOptimizer):
         super().__init__(obj_func, bounds, dim, max_iter, dim)
         self.pop_size = pop_size
         self.lb, self.ub = bounds
-        # khởi tạo population
         self.population = np.random.uniform(
             self.lb, self.ub, (pop_size, dim)
         )
@@ -48,3 +47,14 @@ class TLBO(BaseOptimizer):
         if self.fitness[best_idx] < self.best_score:
             self.best_score = self.fitness[best_idx]
             self.best_solution = self.population[best_idx]
+
+    def initialize(self):
+        self.population = np.random.uniform(
+            self.lb, self.ub, (self.pop_size, self.dim)
+        )
+        self.fitness = np.array([
+            self.obj_func(ind) for ind in self.population
+        ])
+        best_idx = np.argmin(self.fitness)
+        self.best_score = self.fitness[best_idx]
+        self.best_position = self.population[best_idx].copy()

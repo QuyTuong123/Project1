@@ -9,13 +9,11 @@ from algorithms.biology.cs import CS
 # Evolution
 from algorithms.evolution.ga import GA
 from algorithms.evolution.de import DE
-
 # Physics
 from algorithms.physics.sa import SA
 
 # Human
 from algorithms.human.tlbo import TLBO
-
 def test_scalability():
     dimensions = [10, 50, 100]
     algorithms = {
