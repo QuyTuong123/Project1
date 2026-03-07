@@ -10,13 +10,17 @@ class CS(BaseOptimizer):
         self.pa = pa
 
     def initialize(self):
-        lb, ub = self.bounds
-        self.population = np.random.uniform(lb, ub, (self.pop_size, self.dim))
-        self.fitness = np.apply_along_axis(self.obj_func, 1, self.population)
+
+        self.population = np.random.uniform(
+            self.lb, self.ub, (self.pop_size, self.dim)
+        )
+        self.fitness = np.array([
+            self.obj_func(ind) for ind in self.population
+        ])
 
         best_idx = np.argmin(self.fitness)
-        self.gbest = self.population[best_idx].copy()
         self.best_score = self.fitness[best_idx]
+        self.best_position = self.population[best_idx].copy()
 
     def levy(self):
         return np.random.randn(self.dim)

@@ -3,8 +3,8 @@ import os
 import numpy as np
 from problems.sphere import Sphere
 from problems.tsp import TSPProblem
-from algorithms.biology.abc import ABC
 # Biology algorithms
+from algorithms.biology.abc import ABC
 from algorithms.biology.pso import PSO
 from algorithms.biology.aco import ACO
 from algorithms.biology.fa import FA
@@ -22,13 +22,17 @@ from visualization.plot_convergence import plot_convergence, plot_diversity
 from visualization.plot_3d_surface import plot_surface, plot_particles_on_surface
 
 def main():
-    print("\n===== STEP 1: 2D Optimization =====")
+    print("\n===== STEP 1: COMPARE CONTINUOUS ALGORITHMS =====")
     problem2d = Sphere(dim=2)
     algorithms = {
         "PSO": PSO,   
         "ABC": ABC,
         "FA": FA,
-        "CS": CS
+        "CS": CS,
+        "GA": GA,
+        "DE": DE,
+        "SA": SA,
+        "TLBO": TLBO
     }
     results = {}
     for name, Algo in algorithms.items():
@@ -59,10 +63,9 @@ def main():
             else:
                 pos_str += val
         pos_str += "]"
-
         print("{:<10} {:<18} {}".format(name, fit_str, pos_str))
 
-    print("\n===== STEP 2: VISUALIZATION =====")
+    print("\n===== STEP 2: VISUALIZATION (4 HISTOGRAMS) =====")
     optimizer = ABC(
         obj_func=problem2d.evaluate,
         bounds=(problem2d.lb, problem2d.ub),
@@ -79,7 +82,7 @@ def main():
     plot_surface(problem2d.evaluate, problem2d.lb, problem2d.ub)
     # particle movement
     plot_particles_on_surface(problem2d.evaluate, optimizer.trajectory)
-    print("\n===== STEP 3: 30 RUNS COMPARISON =====")
+    print("\n===== STEP 3: STATISTIC COMPARISION =====")
     algos_8 = {
         "FA": FA,
         "ABC": ABC,
@@ -105,6 +108,16 @@ def main():
         name, mean, std, runtime
         ))
     print("\nDone!")
+
+    print("\n===== STEP 4: TSP WITH ACO (DISCRETE OPTIMIZATION) =====")
+    aco = ACO(
+        n_cities=20,
+        n_ants=10,
+        max_iter=50
+    )
+    best_tour, best_distance = aco.run()
+    print("Best Tour:", best_tour)
+    print("Best Distance:", best_distance)
 
 if __name__ == "__main__":
     main()
