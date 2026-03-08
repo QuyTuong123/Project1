@@ -46,10 +46,11 @@ class CS(BaseOptimizer):
         if self.fitness[best_idx] < self.best_score:
             self.gbest = self.population[best_idx].copy()
             self.best_score = self.fitness[best_idx]
+            self.best_position = self.gbest.copy()
 
     def run(self):
         self.initialize()
         for _ in range(self.max_iter):
             self.update()
             self.history.append(self.best_score)
-        return self.gbest, self.best_score
+        return self.best_position, self.best_score

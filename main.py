@@ -25,10 +25,10 @@ def main():
     print("\n===== STEP 1: COMPARE CONTINUOUS ALGORITHMS =====")
     problem2d = Sphere(dim=2)
     algorithms = {
-        "PSO": PSO,   
+        "FA": FA,   
         "ABC": ABC,
-        "FA": FA,
         "CS": CS,
+        "PSO": PSO,
         "GA": GA,
         "DE": DE,
         "SA": SA,
@@ -57,7 +57,7 @@ def main():
                 val = f"{x:.1e}"
             else:
                 val = f"{x:.5f}"
-
+                
             if i < len(pos) - 1:
                 pos_str += val + " , "
             else:
@@ -107,7 +107,6 @@ def main():
         print("{:<10} {:<15.6e} {:<15.6e} {:<10.4f}".format(
         name, mean, std, runtime
         ))
-    print("\nDone!")
 
     print("\n===== STEP 4: TSP WITH ACO (DISCRETE OPTIMIZATION) =====")
     aco = ACO(
@@ -118,6 +117,8 @@ def main():
     best_tour, best_distance = aco.run()
     print("Best Tour:", best_tour)
     print("Best Distance:", best_distance)
+    
+    print("\nDone!")
 
 if __name__ == "__main__":
     main()

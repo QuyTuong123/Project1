@@ -50,6 +50,7 @@ class ABC(BaseOptimizer):
         if self.fitness[best_idx] < self.best_score:
             self.gbest = self.population[best_idx].copy()
             self.best_score = self.fitness[best_idx]
+            self.best_position = self.population[best_idx].copy()
 
     def run(self):
         self.initialize()
@@ -57,4 +58,4 @@ class ABC(BaseOptimizer):
             self.update()
             self.history.append(self.best_score)
             self.trajectory.append(self.population.copy())
-        return self.gbest ,self.best_score
+        return self.best_position ,self.best_score
