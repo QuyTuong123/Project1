@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def plot_multiple_convergence(results):
+def plot_multiple_convergence(results, block=True):
     for name, history in results.items():
         plt.plot(history, label=name)
     plt.xlabel("Iteration")
@@ -8,22 +8,22 @@ def plot_multiple_convergence(results):
     plt.legend()
     plt.title("Convergence Comparison")
     plt.grid(True)
-    plt.show()
+    plt.show(block=block)
 
-def plot_convergence(history, title="Convergence Plot"):
+def plot_convergence(history, title="Convergence Plot", block=True):
     plt.figure()
     plt.plot(history)
     plt.xlabel("Iteration")
     plt.ylabel("Best Fitness")
     plt.title(title)
     plt.grid(True)
-    plt.show()
+    plt.show(block=block)
 
-def plot_diversity(diversity_history):
+def plot_diversity(diversity_history, block=True):
     plt.figure()
     plt.plot(diversity_history)
     plt.xlabel("Iteration")
     plt.ylabel("Diversity (Std)")
     plt.title("Exploration Analysis")
     plt.grid(True)
-    plt.show()
+    plt.show(block=block)

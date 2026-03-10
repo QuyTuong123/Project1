@@ -56,6 +56,13 @@ class ABC(BaseOptimizer):
         self.initialize()
         for _ in range(self.max_iter):
             self.update()
+
+            #convergence
             self.history.append(self.best_score)
+            #diversity
+            diversity = np.std(self.population)
+            self.diversity_history.append(diversity)
+
+            # trajectory
             self.trajectory.append(self.population.copy())
         return self.best_position ,self.best_score
