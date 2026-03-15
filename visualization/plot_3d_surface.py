@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def plot_surface(obj_func, lb=-5, ub=5, resolution=100, block=True):
+def plot_surface(obj_func, lb=-5, ub=5, resolution=100, title="Sphere Function Surface", block=True):
     x = np.linspace(lb, ub, resolution)
     y = np.linspace(lb, ub, resolution)
     X, Y = np.meshgrid(x, y)
@@ -21,10 +21,10 @@ def plot_surface(obj_func, lb=-5, ub=5, resolution=100, block=True):
     ax.set_ylabel("Y")
     ax.set_zlabel("Fitness")
 
-    plt.title("Sphere Function Surface")
+    plt.title(title)
     plt.show(block=block)
 
-def plot_particles_on_surface(obj_func, trajectory, lb=-5, ub=5, block=True):
+def plot_particles_on_surface(obj_func, trajectory, lb=-5, ub=5, title="Particle Movement", block=True):
 
     x = np.linspace(lb, ub, 100)
     y = np.linspace(lb, ub, 100)
@@ -42,5 +42,5 @@ def plot_particles_on_surface(obj_func, trajectory, lb=-5, ub=5, block=True):
         zs = xs**2 + ys**2
         ax.scatter(xs, ys, zs, color='r', s=10)
 
-    plt.title("Particle Movement")
+    plt.title(title)
     plt.show(block=block)

@@ -1,173 +1,164 @@
-# Metaheuristic Optimization Algorithms
+# Project 1 - Search và Nature-Inspired Optimization
 
-This project implements several metaheuristic optimization algorithms for solving continuous optimization problems and the Traveling Salesman Problem (TSP).
+Dự án triển khai các thuật toán tối ưu lấy cảm hứng tự nhiên, thuật toán tìm kiếm cổ điển, và một giao diện UI (Tkinter) để chạy toàn bộ pipeline theo yêu cầu đề bài.
 
-The goal of the project is to compare the performance of different bio-inspired and evolutionary algorithms in terms of convergence, accuracy, and computational time.
+## 1. Yêu cầu hệ thống
 
----
+- Python 3.10+ (khuyến nghị 3.10 hoặc 3.11 để tránh lỗi cài `matplotlib` từ source)
+- Hệ điều hành: Windows/Linux/macOS
+- Có `pip`
 
-## Implemented Algorithms
+## 2. Cài đặt môi trường
 
-### Swarm Intelligence
-- PSO — Particle Swarm Optimization
-- ABC — Artificial Bee Colony
-- FA — Firefly Algorithm
-- CS — Cuckoo Search
+### Cách nhanh (khuyến nghị)
 
-### Evolutionary Algorithms
-- GA — Genetic Algorithm
-- DE — Differential Evolution
+Trong thư mục gốc dự án:
 
-### Humanity Algorithms
-- TLBO — Teaching Learning-based Optimization
-
-### Ant Colony Optimization
-- ACO — Ant Colony Optimization (for TSP)
-
----
-
-## Project Structure
-
-```
-main.py                 # Main script to run all algorithms
-algorithms/             # Implementation of optimization algorithms
-├── biology/            # Bio-inspired algorithms (PSO, ABC, FA, CS, ACO)
-├── evolution/          # Evolutionary algorithms (GA, DE)
-├── human/              # Human-inspired algorithms (TLBO)
-└── physics/            # Physics-based algorithms (SA)
-core/                   # Core classes and utilities
-problems/               # Optimization problems (Sphere, TSP)
-experiments/            # Statistical analysis and testing
-visualization/          # Plotting and visualization tools
+```bash
+python -m venv .venv
 ```
 
----
+Kích hoạt môi trường ảo:
 
-## Requirements
+- PowerShell:
 
-- Python 3.8 or higher
-- Required packages: numpy, matplotlib
-
----
-
-## Installation
-
-1. **Clone or download the project** to your local machine.
-
-2. **Navigate to the project directory**:
-   ```
-   cd path/to/Metaheuristic-Optimization-Algorithms
-   ```
-
-3. **(Recommended) Create and activate a virtual environment**:
-   - Windows (PowerShell):
-     ```powershell
-     python -m venv .venv
-     .\.venv\Scripts\Activate.ps1
-     ```
-   - Windows (cmd):
-     ```cmd
-     python -m venv .venv
-     .\.venv\Scripts\activate.bat
-     ```
-   - macOS / Linux:
-     ```bash
-     python -m venv .venv
-     source .venv/bin/activate
-     ```
-
-4. **Install Python dependencies**:
-   ```
-   pip install -r requirements.txt
-   ```
-
-   Alternatively, you can install the packages manually:
-   ```
-   pip install numpy matplotlib
-   ```
-
----
-
-## Running the Program
-
-1. **Run the main script**:
-   ```
-   python main.py
-   ```
-
-2. The program will execute the following steps:
-   - Compare continuous optimization algorithms on a 2D Sphere problem
-   - Generate visualizations (convergence plots, diversity plots, 3D surface plots)
-   - Perform statistical comparison (mean, standard deviation, runtime)
-   - Solve TSP using Ant Colony Optimization
-
-3. **Output**:
-   - Console output showing algorithm comparisons and results
-   - Generated plots saved in the project directory (if visualization is enabled)
-
----
-
-## Usage Examples
-
-### Running Individual Algorithms
-
-You can modify `main.py` to run specific algorithms or change parameters:
-
-```python
-from algorithms.biology.pso import PSO
-from problems.sphere import Sphere
-
-problem = Sphere(dim=2)
-optimizer = PSO(
-    obj_func=problem.evaluate,
-    bounds=(problem.lb, problem.ub),
-    dim=2,
-    pop_size=30,
-    max_iter=100
-)
-best_position, best_score = optimizer.run()
-print(f"Best position: {best_position}, Best score: {best_score}")
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
-### Running Experiments
+- CMD:
 
-For statistical analysis:
-
-```python
-from experiments.convergence_analysis import run_30_times
-from algorithms.biology.abc import ABC
-
-mean, std, runtime = run_30_times(ABC)
-print(f"Mean: {mean}, Std: {std}, Time: {runtime}")
+```cmd
+.venv\Scripts\activate.bat
 ```
 
-### Visualization
+Cài dependencies:
 
-```python
-from visualization.plot_convergence import plot_convergence
-from algorithms.biology.abc import ABC
-
-optimizer = ABC(...)
-optimizer.run()
-plot_convergence(optimizer.history)
+```bash
+pip install -r requirements.txt
 ```
 
----
+Nếu thiếu thư viện vẽ, cài thêm thủ công:
 
-## Troubleshooting
+```bash
+pip install numpy matplotlib
+```
 
-- **Import errors**: Ensure all dependencies are installed via `pip install -r requirements.txt`
-- **Python version**: Make sure you're using Python 3.8+
-- **Matplotlib issues**: If plots don't display, ensure you have a GUI backend installed (e.g., Tkinter)
+## 3. Chạy UI
 
----
+Chạy lệnh sau ở thư mục gốc dự án:
 
-## Contributing
+```bash
+python main.py
+```
 
-Feel free to contribute by adding new algorithms, problems, or improving existing implementations.
+UI sẽ mở với 3 tab chính:
 
----
+- `Core Workflow`
+- `Requirement Tools`
+- `One Click`
 
-## License
+## 4. Hướng dẫn sử dụng UI
 
-This project is open-source. Please refer to the license file for details.
+### Tab `Core Workflow`
+
+- `Step 1: Required Algorithms + Baseline Compare`
+: Chạy so sánh thuật toán chính + baseline BFS/DFS/UCS/Greedy/A*/HC/SA.
+
+- `Step 2: Required Visualizations`
+: Hiển thị trực quan cụ thể (convergence, diversity, 3D landscape, SA/HC) và tạo hình local search.
+
+- `Step 3: Required Metrics`
+: Chạy thống kê, benchmark requirement (quality, time, memory, robustness, scalability, exploration/exploitation).
+
+- `Step 4: Sensitivity + Hypothesis + Discrete`
+: Chạy phân tích độ nhạy tham số, kiểm định giả thuyết, và bài toán TSP rời rạc.
+
+- `Run Core Step 1 -> 4`
+: Chạy toàn bộ 4 bước theo đúng thứ tự.
+
+### Tab `Requirement Tools`
+
+- `Generate SA/HC Convergence Figures`
+- `Requirement Benchmark (Quick)`
+- `Requirement Benchmark (Full)`
+- `Parameter Sensitivity`
+- `Hypothesis Test (HC vs SA)`
+
+Tab này hữu ích khi bạn muốn chạy từng phần riêng lẻ để lấy số liệu/hình riêng.
+
+### Tab `One Click`
+
+- `Run All For Report`
+: Chạy pipeline tổng hợp để lấy dữ liệu phục vụ viết báo cáo.
+
+## 5. Output được sinh ở đâu
+
+Hình ảnh được lưu trong:
+
+- `visualizes/`
+
+Ví dụ:
+
+- `evolution_convergence.png`
+- `swarm_convergence.png`
+- `tlbo_convergence.png`
+- `local_search_sa_convergence.png`
+- `local_search_hc_convergence.png`
+- `requirements_convergence.png`
+- `requirements_robustness.png`
+- `sensitivity_hc_step_size.png`
+- `sensitivity_sa_cooling_rate.png`
+
+Bảng số liệu được lưu trong:
+
+- `experiments/results/`
+
+Ví dụ:
+
+- `continuous_metrics.csv`
+- `scalability_metrics.csv`
+- `exploration_metrics.csv`
+- `discrete_shortest_path_metrics.csv`
+- `sensitivity_hc_step_size.csv`
+- `sensitivity_sa_cooling_rate.csv`
+
+## 6. Chạy script trực tiếp (không qua UI)
+
+- Benchmark requirement:
+
+```bash
+python -m experiments.benchmark_requirements
+```
+
+- Sensitivity:
+
+```bash
+python -m experiments.parameter_sensitivity
+```
+
+- Hypothesis test:
+
+```bash
+python -m experiments.hypothesis_test
+```
+
+## 7. Lỗi thường gặp
+
+- Lỗi `No module named matplotlib`
+: Cài lại bằng `pip install matplotlib` trong đúng môi trường đang chạy.
+
+- Lỗi import local package (`No module named problems`, `algorithms`, ...)
+: Đảm bảo bạn đang chạy lệnh tại thư mục gốc dự án (`Project1`).
+
+- UI không mở
+: Kiểm tra Python có hỗ trợ `tkinter`.
+
+## 8. Cấu trúc chính của dự án
+
+- `main.py`: UI điều khiển trung tâm.
+- `algorithms/`: toàn bộ thuật toán.
+- `problems/`: định nghĩa bài toán.
+- `experiments/`: các script benchmark/phân tích.
+- `visualization/`: hàm vẽ biểu đồ.
+- `report/`: nội dung báo cáo LaTeX.

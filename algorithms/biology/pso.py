@@ -1,7 +1,24 @@
+"""Particle Swarm Optimization (PSO) for continuous optimization."""
+
 import numpy as np
+
 from core.base_optimizer import BaseOptimizer
-from core.utils import initialize_population
+
+
 class PSO(BaseOptimizer):
+    """Particle Swarm Optimization optimizer.
+
+    Args:
+        obj_func: Objective function to minimize.
+        bounds: Tuple of lower/upper bounds.
+        dim: Search dimension.
+        pop_size: Number of particles.
+        max_iter: Number of iterations.
+        w: Inertia weight.
+        c1: Cognitive coefficient.
+        c2: Social coefficient.
+    """
+
     def __init__(self, obj_func, bounds, dim,
                  pop_size=30, max_iter=100,
                  w=0.7, c1=1.5, c2=1.5):
@@ -15,6 +32,7 @@ class PSO(BaseOptimizer):
         self.c2 = c2
 
     def initialize(self):
+        """Initialize particle states, personal bests, and global best."""
         lb, ub = self.bounds
         self.positions = np.random.uniform(lb, ub, (self.pop_size, self.dim))
         self.velocities = np.random.uniform(-1, 1, (self.pop_size, self.dim))
@@ -27,6 +45,7 @@ class PSO(BaseOptimizer):
         self.best_score = self.pbest_scores[best_idx]
 
     def update(self):
+        """Update velocity/position and refresh personal/global best."""
         lb, ub = self.bounds
         for i in range(self.pop_size):
             r1 = np.random.rand(self.dim)
@@ -47,6 +66,11 @@ class PSO(BaseOptimizer):
         self.best_score = self.pbest_scores[best_idx]
 
     def run(self):
+        """Execute optimization loop.
+
+        Returns:
+            tuple[np.ndarray, float]: Best position and best objective value.
+        """
         self.initialize()
         for _ in range(self.max_iter):
             self.update()

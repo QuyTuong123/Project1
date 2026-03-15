@@ -1,8 +1,15 @@
+"""Teaching-Learning-Based Optimization (TLBO) for continuous optimization."""
+
 import numpy as np
+
 from core.base_optimizer import BaseOptimizer
+
+
 class TLBO(BaseOptimizer):
+    """TLBO optimizer."""
+
     def __init__(self, obj_func, bounds, dim=30, pop_size=30, max_iter=500):
-        super().__init__(obj_func, bounds, dim, max_iter, dim)
+        super().__init__(obj_func, bounds, pop_size, max_iter, dim)
         self.pop_size = pop_size
         self.lb, self.ub = bounds
         self.population = np.random.uniform(
@@ -13,6 +20,7 @@ class TLBO(BaseOptimizer):
         ])
         
     def initialize(self):
+        """Initialize learner population and global best."""
         self.population = np.random.uniform(
             self.lb, self.ub, (self.pop_size, self.dim)
         )
@@ -24,6 +32,7 @@ class TLBO(BaseOptimizer):
         self.best_position = self.population[best_idx].copy()
 
     def update(self):
+        """Run teacher phase and learner phase for one iteration."""
         teacher_idx = np.argmin(self.fitness)
         teacher = self.population[teacher_idx]
         mean = np.mean(self.population, axis=0)
@@ -57,4 +66,4 @@ class TLBO(BaseOptimizer):
         best_idx = np.argmin(self.fitness)
         if self.fitness[best_idx] < self.best_score:
             self.best_score = self.fitness[best_idx]
-            self.best_solution = self.population[best_idx]
+            self.best_position = self.population[best_idx].copy()

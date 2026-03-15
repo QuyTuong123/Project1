@@ -1,6 +1,21 @@
+"""Ant Colony Optimization (ACO) for TSP-like routing problems."""
+
 import numpy as np
-from core.base_optimizer import BaseOptimizer
+
+
 class ACO:
+    """Ant Colony Optimization solver for Euclidean TSP.
+
+    Args:
+        n_cities: Number of cities.
+        n_ants: Number of ants per iteration.
+        max_iter: Number of iterations.
+        rho: Pheromone evaporation rate.
+        alpha: Pheromone influence.
+        beta: Heuristic influence.
+        Q: Pheromone deposit constant.
+    """
+
     def __init__(self, n_cities=20, n_ants=10, max_iter=50, rho=0.5, alpha=1, beta=2, Q=100):
         self.n_cities = n_cities
         self.n_ants = n_ants
@@ -15,6 +30,7 @@ class ACO:
         self.pheromone = np.ones((n_cities, n_cities))
 
     def compute_distance_matrix(self, coords):
+        """Compute pairwise Euclidean distance matrix."""
         n = len(coords)
         dist = np.zeros((n, n))
         for i in range(n):
@@ -23,6 +39,7 @@ class ACO:
         return dist
 
     def tour_length(self, tour):
+        """Return total closed-tour length."""
         total = 0
         for i in range(len(tour) - 1):
             total += self.distance[tour[i]][tour[i+1]]
@@ -30,6 +47,7 @@ class ACO:
         return total
 
     def select_next_city(self, current, unvisited):
+        """Sample next city from pheromone-weighted transition probabilities."""
         probs = []
         for city in unvisited:
             tau = self.pheromone[current][city] ** self.alpha
@@ -41,6 +59,11 @@ class ACO:
         return np.random.choice(unvisited, p=probs)
 
     def run(self):
+        """Execute ACO loop.
+
+        Returns:
+            tuple[list[int], float]: Best tour and best tour length.
+        """
         best_length = float("inf")
         best_tour = None
 

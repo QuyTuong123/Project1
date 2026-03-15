@@ -19,11 +19,11 @@ def plot_convergence(history, title="Convergence Plot", block=True):
     plt.grid(True)
     plt.show(block=block)
 
-def plot_diversity(diversity_history, block=True):
+def plot_diversity(diversity_history, title="Exploration Analysis", block=True):
     plt.figure()
     plt.plot(diversity_history)
     plt.xlabel("Iteration")
     plt.ylabel("Diversity (Std)")
-    plt.title("Exploration Analysis")
+    plt.title(title)
     plt.grid(True)
     plt.show(block=block)

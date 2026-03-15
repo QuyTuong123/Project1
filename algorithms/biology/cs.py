@@ -1,7 +1,22 @@
+"""Cuckoo Search (CS) for continuous optimization."""
+
 import numpy as np
+
 from core.base_optimizer import BaseOptimizer
-from core.utils import initialize_population
+
+
 class CS(BaseOptimizer):
+    """Cuckoo Search optimizer.
+
+    Args:
+        obj_func: Objective function to minimize.
+        bounds: Tuple of lower/upper bounds.
+        dim: Search dimension.
+        pop_size: Number of nests.
+        max_iter: Number of iterations.
+        pa: Discovery probability (nest abandonment rate).
+    """
+
     def __init__(self, obj_func, bounds, dim,
                  pop_size=30, max_iter=100, pa=0.25):
 
@@ -10,6 +25,7 @@ class CS(BaseOptimizer):
         self.pa = pa
 
     def initialize(self):
+        """Initialize nests and current best."""
 
         self.population = np.random.uniform(
             self.lb, self.ub, (self.pop_size, self.dim)
@@ -23,9 +39,11 @@ class CS(BaseOptimizer):
         self.best_position = self.population[best_idx].copy()
 
     def levy(self):
+        """Generate a simplified Levy-like random step."""
         return np.random.randn(self.dim)
 
     def update(self):
+        """Update nests by random walks and abandonment."""
         lb, ub = self.bounds
         for i in range(self.pop_size):
             step = self.levy()
@@ -49,6 +67,11 @@ class CS(BaseOptimizer):
             self.best_position = self.gbest.copy()
 
     def run(self):
+        """Execute optimization loop.
+
+        Returns:
+            tuple[np.ndarray, float]: Best position and best objective value.
+        """
         self.initialize()
         for _ in range(self.max_iter):
             self.update()

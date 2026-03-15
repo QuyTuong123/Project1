@@ -1,0 +1,6 @@
+Algorithm,Found,PathLen,Expanded,TimeMs
+BFS,Yes,48,492,2.361600e+00
+DFS,Yes,176,335,1.609700e+00
+UCS,Yes,48,492,7.776800e+00
+Greedy,Yes,48,49,8.345000e-01
+A*,Yes,48,344,5.669900e+00
